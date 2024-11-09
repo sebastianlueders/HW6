@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   SEBASTIAN LUEDERS / SECTION 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -151,8 +151,29 @@ class PriorityQueue<E, P> {
 
     public Node add(E e, P priority) {
 
-        // YOUR CODE GOES HERE
-        return null;
+
+
+        int newNodeIndex = this.tree.size();
+
+        Node newNode = new Node(e, priority, newNodeIndex);
+
+        this.tree.add(newNodeIndex, newNode);
+
+        int parentIndex = (newNodeIndex - 1) / 2;
+
+        Node parent = this.tree.get(parentIndex);
+
+        while(compare(parent.priority(), newNode.priority()) > 0 && parentIndex >= 0) {
+            this.tree.set(newNodeIndex, parent);
+            this.tree.set(parentIndex, newNode);
+            parent.idx = newNodeIndex;
+            newNode.idx = parentIndex;
+            newNodeIndex = parentIndex;
+            parentIndex = (newNodeIndex - 1) / 2;
+            parent = this.tree.get(parentIndex);
+        }
+
+        return newNode;
     }
 
 
@@ -168,8 +189,17 @@ class PriorityQueue<E, P> {
 
     public boolean contains(E e) {
 
-        // ADD YOUR CODE HERE
-        return false;
+        boolean contains = false;
+
+        for(int i = 0; i < this.tree.size(); i++) {
+            if(e.equals(this.tree.get(i).value())) {
+                contains = true;
+                break;
+            }
+        }
+
+
+        return contains;
     }
 
 

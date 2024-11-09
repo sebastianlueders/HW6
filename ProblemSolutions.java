@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   SEBASTIAN LUEDERS / SECTION 002
  *
  *   This java file contains the problem solutions for the methods lastBoulder,
  *   showDuplicates, and pair methods. You should utilize the Java Collection
@@ -65,10 +65,20 @@ public class ProblemSolutions {
 
   public static int lastBoulder(int[] boulders) {
 
-      //
-      // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME / SECTION # ABOVE
-      //
-      return -1;
+    PriorityQueue<Integer> sortedBoulders = new PriorityQueue<>(Collections.reverseOrder());
+    int i = 0;
+    while(i < boulders.length) {
+        sortedBoulders.add(boulders[i++]);
+    }
+
+    while(sortedBoulders.size() > 1) {
+        int y = sortedBoulders.poll();
+        int x = sortedBoulders.poll();
+        int newBoulder = y - x;
+        sortedBoulders.add(newBoulder);
+    }
+
+    return sortedBoulders.poll();
   }
 
 
@@ -91,10 +101,24 @@ public class ProblemSolutions {
 
     public static ArrayList<String> showDuplicates(ArrayList<String> input) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure result is sorted in ascending order
+        PriorityQueue<String> pq = new PriorityQueue<>(input);
+        boolean dup = false;
+        ArrayList<String> results = new ArrayList<>();
+        String current = pq.poll();
+
+        while(!pq.isEmpty()) {
+            while(!pq.isEmpty() && pq.peek().equals(current)) {
+                current = pq.poll();
+                dup = true;
+            }
+            if(dup) {
+                results.add(current);
+                dup = false;
+            } 
+            current = pq.poll();
+        }
+
+        return results;  // Make sure result is sorted in ascending order
 
     }
 
@@ -131,9 +155,34 @@ public class ProblemSolutions {
 
     public static ArrayList<String> pair(int[] input, int k) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure returned lists is sorted as indicated above
+        HashSet<Integer> possValues = new HashSet<>();
+        HashSet<Integer> confirmedVals = new HashSet<>();
+        PriorityQueue<Integer> values = new PriorityQueue<>();
+        ArrayList<String> results = new ArrayList<>();
+
+        for (int i = 0; i < input.length; i++) {
+            possValues.add(k - input[i]);
+            
+            if(possValues.contains(input[i])) {
+                confirmedVals.add(input[i] <= (k/2) ? input[i] : k - input[i]);
+            }
+
+
+
+        }
+
+        for(int val : confirmedVals) {
+            values.add(val);
+        }
+
+        while(!values.isEmpty()) {
+            int currVal = values.poll();
+            int itsPair = k - currVal;
+            String newPair = "(" + currVal + ", " + itsPair + ")";
+            results.add(newPair);
+        }
+
+
+        return results;  // Make sure returned lists is sorted as indicated above
     }
 }
